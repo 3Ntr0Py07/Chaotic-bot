@@ -13,6 +13,6 @@ bot = commands.Bot(command_prefix='$')
 async def hello(ctx):
     await ctx.reply('Hello')
 
-bot.run('OTQ2NzgzMTAyMTQxODc0MjU2.YhjueQ.0KTAuCEYdvkwNVFL9dSuz4VNBb0')
+bot.run(TOKEN)
 print('running')
 os.system('pause')
