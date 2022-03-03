@@ -3,7 +3,7 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-#import yeet
+import yeet
 
 #esc = True
 
@@ -33,4 +33,4 @@ intents = discord.Intents.default()
 intents.members = True
 #intents.all = True
 client = myclient(intents=intents)
-client.run('OTQ2NzgzMTAyMTQxODc0MjU2.YhjueQ.ZYkX3R20ZLWm4Lro6oU_Z65UFzU')
+client.run(yeet.f)
