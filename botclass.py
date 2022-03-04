@@ -1,7 +1,13 @@
 import os
+from pickle import FALSE, TRUE
 import discord
 from discord.ext import commands
 import time
+from dotenv import load_dotenv
+
+load_dotenv()
+ad = str(os.getenv('ADMINS'))
+ADMINS = ad.split('&&&')
 
 
 
@@ -12,9 +18,16 @@ class DaCommands(commands.Cog):
         self.last_msg = None
 
     @commands.command(name="status")
-    @commands.has_role('The One and Only Entropy')
     async def setstatus(self, ctx: commands.Context, *, text: str):
-        await self.bot.change_presence(activity=discord.Game(name=text))
+        print(ADMINS)
+        for i in range(len(ADMINS)):
+            tabbers = str((ctx.author))
+            print(tabbers)
+            nadmin = TRUE
+            if tabbers == ADMINS[i]:
+                await self.bot.change_presence(activity=discord.Game(name=text))
+            else:
+                nadmin = FALSE
 
     @commands.command(name='hello',pass_context=True)
     async def hello(self,ctx: commands.Context):
@@ -29,16 +42,18 @@ class DaCommands(commands.Cog):
             return
 
         await channel.send(f"Welcome, {member}!")
-
+    
     @commands.command(name='close',pass_context=True)
-    @commands.has_role('The One and Only Entropy')
     async def exits(self,ctx: commands.Context):
-        await ctx.send('Closed')
-        try:
-            await quit()
-        except:
-            os.system('clear')
-
+        for i in range(len(ADMINS)):
+            if ctx.author.id == ADMINS[i]:
+                await ctx.send('Closed')
+                await quit()
+            else:
+                nadmin = FALSE
+        if not nadmin:
+            ctx.send('You dont have the rights to do that')
+    
     @commands.command(name="ping")
     async def ping(self, ctx: commands.Context):
         start_time = time.time()
@@ -47,6 +62,7 @@ class DaCommands(commands.Cog):
 
         await message.edit(content=f"Ping: {round(self.bot.latency * 1000)}ms\nAPI: {round((end_time - start_time) * 1000)}ms")
     
+
     @commands.Cog.listener()
     async def on_message_delete(self, message: discord.Message):
         self.last_msg = message
@@ -62,9 +78,9 @@ class DaCommands(commands.Cog):
 
         embed = discord.Embed(title=f"Message from {author}", description=content)
         await ctx.send(embed=embed)
-   # @commands.event()
+    # @commands.event()
     #async def on_ready(self, ctx: commands.Context):
-     #   await self.bot.change_presence(activity=discord.Game(name='.nothin'))
+    #   await self.bot.change_presence(activity=discord.Game(name='.nothin'))
 
 
 def setup(client: commands.Bot):
