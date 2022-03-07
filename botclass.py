@@ -1,4 +1,5 @@
 from asyncio import Task, tasks
+import asyncio
 import os
 from pickle import FALSE, TRUE
 import discord
@@ -15,7 +16,8 @@ load_dotenv()
 
 PASSWORD = os.getenv('PASSWORD')
 
-
+ht = ['&status [Neuer Status] [Passwort]','&hello','&close [Passwort]','&ping','&snipe','&wipe [Nummer der Nachrichten]','&help']
+hd = ['Status des Bots ändern','Keine weiter Information','Bot Abschalten','Ping','Zeigt zuletzt gelöschte Nachricht','Löscht Nachrichten(Anzahl ohne den Command)','Zeigt diese Nachricht']
 
 class DaCommands(commands.Cog):
 
@@ -28,7 +30,7 @@ class DaCommands(commands.Cog):
         ps =  hashlib.sha256()
         ps.update(bytes(args[1],'utf-8'))
         if  str(ps.digest()) == PASSWORD:
-            await ctx.channel.purge(limit=2)
+            await ctx.channel.purge(limit=1)
             await ctx.send(f'Status changed to {args[0]}')
             await self.bot.change_presence(activity=discord.Game(name=args[0]))
         else:
@@ -46,12 +48,16 @@ class DaCommands(commands.Cog):
         await guild.system_channel.send(f"Welcome, {member}!")
     
     @commands.command(name='close',pass_context=True)
-    async def exits(self,ctx: commands.Context,* , pw: str):
+    async def exits(self,ctx: commands.Context,* , pw):
+        if pw == None:
+            ctx.send('You are missing a password')
         ps =  hashlib.sha256()
         ps.update(bytes(pw,'utf-8'))
         if  str(ps.digest()) == PASSWORD:
-            await ctx.channel.purge(limit=2)
+            await ctx.channel.purge(limit=1)
             await ctx.send('Shutting Down')
+            time.sleep(10)
+            await ctx.channel.purge(limit=1)
             await ctx.bot.logout()
         else:
             await ctx.send('You cannot do that')
@@ -63,7 +69,6 @@ class DaCommands(commands.Cog):
         end_time = time.time()
 
         await message.edit(content=f"Ping: {round(self.bot.latency * 1000)}ms\nAPI: {round((end_time - start_time) * 1000)}ms")
-    
 
     @commands.Cog.listener()
     async def on_message_delete(self, message: discord.Message):
@@ -86,48 +91,40 @@ class DaCommands(commands.Cog):
         n = int(number)
         await ctx.channel.purge(limit=n+1)
     
+    @commands.command(name='help')
+    async def helper(self,ctx: commands.Context):
+        embed = discord.Embed(title= 'Help', description=str(datetime.now()),colour = 0x87CEEB)
+        for i in range(len(hd)):
+            embed.add_field(name=ht[i],value=hd[i],inline=False)
+        await ctx.send(embed=embed)
+
     @commands.command(name='fetch')
     async def fetch_git(self,ctx):
-        self.loop.create_task(fetch_git())
-
-
-    
-    @commands.command(name='join')
-    async def jn(self,ctx:commands.Context,*,link:str):
-        webbrowser.open(link)
-    # @commands.event()
-    #async def on_ready(self, ctx: commands.Context):
-    #   await self.bot.change_presence(activity=discord.Game(name='.nothin'))
-
-
-
-async def fetch_git(self,):
-    changed,changes,number = gitty.botinfo()
-    channel = self.bot.get_channel(946895128545624207)
-    await channel.purge(limit=100000)
-    if not changed:
-        return
-    for i in range(number):
-
-        auth,curl,com,committer,allfiles,url,parents,sha = gitty.CommitData(changes[i])
-            #print(f'{gitty.colors.CYAN}'+sha+f'{gitty.colors.ENDC}')
-        embed = discord.Embed(title= 'Commit: '+ str(sha), description=str(datetime.now()),colour = 0x87CEEB)
-        fstring = ''
-        allc = ''
-        alls = ''
-        for x in range(len(allfiles)):
-            fstring += 'SHA: ' + allfiles[x][0] + '\n'
-            fstring += 'File: ' + allfiles[x][1] + '\n\n'
-        embed.add_field(name='Author',value=auth, inline=True)
-        embed.add_field(name='Description',value=str(com.message), inline=False)
-        
-        if not fstring == '':
-            if len(fstring)<1024:
-                embed.add_field(name='Files',value=fstring, inline=False)
-            else:
-                embed.add_field(name='Files',value='To Many To Display',inline=False)
-        embed.add_field(name='URL',value=url, inline=False)
-        await channel.send(embed=embed)
+        changed,changes,number = gitty.botinfo()
+        channel = self.bot.get_channel(941243211056304178)
+        await channel.purge(limit=100000)
+        if not changed:
+            return
+        print(number)
+        for i in range(number):
+            auth,com,allfiles,url,sha = gitty.CommitData(changes[i])
+                #print(f'{gitty.colors.CYAN}'+sha+f'{gitty.colors.ENDC}')
+            embed = discord.Embed(title= 'Commit: '+ str(sha), description=str(datetime.now()),colour = 0x87CEEB)
+            fstring = ''
+            allc = ''
+            alls = ''
+            for x in range(len(allfiles)):
+                fstring += 'SHA: ' + allfiles[x][0] + '\n'
+                fstring += 'File: ' + allfiles[x][1] + '\n\n'
+            embed.add_field(name='Author',value=auth, inline=True)
+            embed.add_field(name='Description',value=str(com.message), inline=False)
+            if not fstring == '':
+                if len(fstring)<1024:
+                    embed.add_field(name='Files',value=fstring, inline=False)
+                else:
+                    embed.add_field(name='Files',value='To Many To Display',inline=False)
+            embed.add_field(name='URL',value=url, inline=False)
+            await channel.send(embed=embed)
 
 
 

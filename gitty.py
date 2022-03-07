@@ -57,7 +57,7 @@ def CommitData(sha: str):
     url = str(c.html_url)
     parents = str(c.parents)
 
-    return auth,curl,com,committer,allfiles,url,parents,sha
+    return auth,com,allfiles,url,sha
 
 
 def CommitStatuses(c):
@@ -93,12 +93,17 @@ for i in range(comms.totalCount):
     commit[i] = commit[i].replace('Commit(sha="','')
     commit[i] = commit[i].replace('")','')
 
+class ReversableList(list):
+    def rev(self):
+        return list(reversed(self))
+
 def botinfo():
     changed = NewCommits(commit)
     changes = []
+    l=ReversableList(commit)
     if changed:
         for i in range(len(commit)):
             changes.append(commit[i])
     dotenv.set_key('.env','INDICES',str(comms.totalCount))
-    return changed, commit.reverse(), comms.totalCount
+    return changed, l.rev(), comms.totalCount
                             #len(commit)
