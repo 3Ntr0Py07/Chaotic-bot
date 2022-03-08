@@ -100,6 +100,9 @@ class DaCommands(commands.Cog):
 
     @commands.command(name='fetch')
     async def fetch_git(self,ctx):
+        if (not gitty.CheckGitIsUse()):
+            await ctx.send("Git Hub is currently WIP. Pleas wait.")
+            return 
         changed,changes,number = gitty.botinfo()
         channel = self.bot.get_channel(941243211056304178)
         await channel.purge(limit=100000)
