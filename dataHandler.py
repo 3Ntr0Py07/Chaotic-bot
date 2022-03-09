@@ -88,10 +88,10 @@ class __GitClass__(__HandlerClass__):
     def __init__(self):
         super().__init__("Git")
 
-class __GitClass__(__HandlerClass__):
+class __ChannelIDClass__(__HandlerClass__):
     #override
     def __init__(self):
-        super().__init__("Git")
+        super().__init__("ChannelID")
         
 class __TestClass__(__HandlerClass__):
     #override
@@ -100,11 +100,7 @@ class __TestClass__(__HandlerClass__):
 
 ############################################################# Functions ################################################################
 
-def __LogTime__():
-    return ""
 
-def __LogMsg__(msg, _type="LOG"):
-    print("[DATA HANDLER]#[" + str(_type) + "]#[{" + str(__LogTime__()) + "}]> " + msg)
 
 def __Init__():
     __LogMsg__("Start INIT")
@@ -145,6 +141,7 @@ BACKUP_PATH = "config.json.backup"
 __Init__()
 
 Git = __GitClass__()
+ChancelIDs = __ChannelIDClass__()
 
 if (__name__ == "__main__"):
     Test = __TestClass__()

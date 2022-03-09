@@ -11,6 +11,7 @@ import hashlib
 import gitty
 from datetime import datetime
 import webbrowser
+from dataHandler import ChancelIDs
 
 load_dotenv()
 
@@ -98,13 +99,17 @@ class DaCommands(commands.Cog):
             embed.add_field(name=ht[i],value=hd[i],inline=False)
         await ctx.send(embed=embed)
 
-    @commands.command(name='fetch')
+    @commands.command(name='git.fetch')
     async def fetch_git(self,ctx):
         if (not gitty.CheckGitIsUse()):
             await ctx.send("Git Hub is currently WIP. Pleas wait.")
-            return 
+            return
         changed,changes,number = gitty.botinfo()
-        channel = self.bot.get_channel(941243211056304178)
+        channelId = ChancelIDs.Load("GitCommitChannel") # 941243211056304178
+        if (channelId == None):
+            channel = ctx
+        else:
+            channel = self.bot.get_channel(channelId)
         await channel.purge(limit=100000)
         if not changed:
             return

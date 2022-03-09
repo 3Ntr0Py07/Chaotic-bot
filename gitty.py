@@ -10,12 +10,50 @@ import datetime
 import colorama
 import github
 import pickle
+from dataHandler import Git as GitDataHandler
+from localDebuger import Debuger
 
 ########################### GITTY FUNCTIONS AND CLASSES ############################################
 
+Debug = Debuger("GITTY")
+
 def CheckGitIsUse():
-    global gitRepoName
-    return gitRepoName != None
+    return __isInit__
+
+def __Init__():
+    global __isInit__
+    gitRepoName = GitDataHandler.Load("GitReposetoryName", newEntry=True) # Chaossplitter/littlealchemist
+    if (__isInit__ or (gitRepoName == None)):
+        return -1
+    try:
+        colorama.init()
+    
+        date1 = datetime.datetime(1970,1,1,0,0,0)
+    
+        load_dotenv()
+        TOKEN = os.getenv('GITHUB_TOKEN')
+        IND = int(os.getenv('INDICES'))
+        t2 = os.getenv('TIME').replace("'","")
+        time2 = datetime.timedelta(0,(int(t2)))
+        TIME = date1 + time2
+        g = Github(TOKEN)
+    
+        repo = g.get_repo(gitRepoName)
+    
+        commit= []
+        comms = CheckCommits()
+    
+        for i in range(comms.totalCount):
+            commit.append(str(comms[i]))
+            commit[i] = commit[i].replace('Commit(sha="','')
+            commit[i] = commit[i].replace('")','')
+    
+        __isInit__ = True
+        return 0
+    except Exception as _err:
+        Debug.LogError("Git faild to init", _err)
+        __isInit__ = False
+        return 1
 
 def __GetGitPath():
     global
@@ -115,28 +153,6 @@ def botinfo():
 
 #################################### GITTY INIT ############################################
 
-#gitRepoName = "Chaossplitter/littlealchemist"
-gitRepoName = None
+__isInit__ = False
+__Init__()
 
-if (CheckGitIsUse()):
-    colorama.init()
-
-    date1 = datetime.datetime(1970,1,1,0,0,0)
-
-    load_dotenv()
-    TOKEN = os.getenv('GITHUB_TOKEN')
-    IND = int(os.getenv('INDICES'))
-    t2 = os.getenv('TIME').replace("'","")
-    time2 = datetime.timedelta(0,(int(t2)))
-    TIME = date1 + time2
-    g = Github(TOKEN)
-
-    repo = g.get_repo(gitRepoName)
-
-    commit= []
-    comms = CheckCommits()
-
-    for i in range(comms.totalCount):
-        commit.append(str(comms[i]))
-        commit[i] = commit[i].replace('Commit(sha="','')
-        commit[i] = commit[i].replace('")','')
