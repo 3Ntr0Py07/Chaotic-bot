@@ -29,7 +29,7 @@ class __HandlerClass__(ABC):
             __reulte = dataDic[str(self._type_)][str(name)]
         except Exception as _err:
             __error = _err
-            Debug.LogWr("Loading " + str(self._type_) + "." + str(name) + " faild. " + str(_err), "WAR")
+            Debug.LogWarning("Loading " + str(self._type_) + "." + str(name) + " faild. ", str(_err))
             if (newEntry):
                 Debug.Log(" => Creating new empty entry " + str(self._type_) + "." + str(name) + ".")
                 self.__SaveData__(name, None)
