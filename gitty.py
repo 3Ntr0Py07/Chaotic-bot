@@ -22,6 +22,7 @@ def CheckGitIsUse():
 
 def __Init__():
     global __isInit__
+    global repo
     gitRepoName = GitDataHandler.Load("GitReposetoryName", newEntry=True) # Chaossplitter/littlealchemist
     if (__isInit__ or (gitRepoName == None)):
         return -1
@@ -55,8 +56,6 @@ def __Init__():
         __isInit__ = False
         return 1
 
-def __GetGitPath():
-    global
 
 class colors():
     BLUE = '\033[94m'
