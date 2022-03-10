@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 import gitty
 import botclass
 import threading
+from localDebuger import Debuger
+
+Debug = Debuger("BOT MAIN")
 
 load_dotenv()
 tken = os.getenv('DISCORD_TOKEN')
@@ -17,7 +20,7 @@ client.remove_command('help')
 client.load_extension('botclass')
 @client.event
 async def on_ready():
-    print(f'{gitty.colors.BLUE}OK{gitty.colors.ENDC}')
+    Debug.Log(f'{Debug.Colors.BLUE}OK{Debug.Colors.ENDC}')
     #print('Messages')
     #client.loop.create_task(botclass.fetchenable())
     pass

@@ -1,5 +1,7 @@
 from asyncio import Task, tasks
 import asyncio
+from botmain import Debug
+from distutils.log import debug
 import os
 from pickle import FALSE, TRUE
 import discord
@@ -12,6 +14,9 @@ import gitty
 from datetime import datetime
 import webbrowser
 from dataHandler import ChancelIDs
+from localDebuger import Debuger
+
+Debug = Debuger("BOT CLASS")
 
 load_dotenv()
 
@@ -44,7 +49,7 @@ class DaCommands(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_join(self, guild, member):
         if not guild.system_channel:
-            await print('not working')
+            await Debug.Log('not working')
             return
         await guild.system_channel.send(f"Welcome, {member}!")
     
@@ -113,7 +118,7 @@ class DaCommands(commands.Cog):
         await channel.purge(limit=100000)
         if not changed:
             return
-        print(number)
+        Debug.Log(number)
         for i in range(number):
             auth,com,allfiles,url,sha = gitty.CommitData(changes[i])
                 #print(f'{gitty.colors.CYAN}'+sha+f'{gitty.colors.ENDC}')

@@ -1,7 +1,7 @@
 """
 This Library contains the local data handling for the manual server device software
 """
-
+#Julians Zugang
 ############################################################# Imports ##################################################################
 
 from abc import ABC, abstractmethod

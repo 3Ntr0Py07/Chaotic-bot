@@ -23,6 +23,8 @@ def CheckGitIsUse():
 def __Init__():
     global __isInit__
     global repo
+    global TIME
+    global IND
     gitRepoName = GitDataHandler.Load("GitReposetoryName", newEntry=True) # Chaossplitter/littlealchemist
     if (__isInit__ or (gitRepoName == None)):
         return -1
@@ -57,10 +59,7 @@ def __Init__():
         return 1
 
 
-class colors():
-    BLUE = '\033[94m'
-    CYAN = '\033[96m'
-    ENDC = '\033[0m'
+
 
 def truncate(num, n):
     if (not CheckGitIsUse()):
@@ -73,9 +72,9 @@ def CheckCommits():
         return
     comms = repo.get_commits(since=TIME)
     tim = datetime.datetime.now().replace(microsecond=0)
-    print(f'{colors.CYAN}'+str(tim)+f'{colors.ENDC}')
+    Debug.Log(f'{Debuger.Colors.CYAN}'+str(tim)+f'{Debuger.Colors.ENDC}')
     secs = int(round(tim.timestamp(), 0))
-    print(f'{colors.CYAN}'+str(secs)+f'{colors.ENDC}')
+    Debug.Log(f'{Debuger.Colors.CYAN}'+str(secs)+f'{Debuger.Colors.ENDC}')
     #dotenv.set_key('.env','TIME',str(secs))
     return comms
 
