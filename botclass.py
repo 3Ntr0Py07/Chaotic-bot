@@ -1,20 +1,36 @@
-from asyncio import Task, tasks
-import asyncio
-from botmain import Debug
-from distutils.log import debug
+# Global Librarys
+__pipList__ = []
 import os
-from pickle import FALSE, TRUE
-import discord
-from discord.ext import commands
-from discord.ext import tasks
-import time
-from dotenv import load_dotenv
-import hashlib
+while True:
+    try:
+        from asyncio import Task, tasks
+        import asyncio
+        from distutils.log import debug
+        from pickle import FALSE, TRUE
+        import discord
+        from discord.ext import commands
+        from discord.ext import tasks
+        import time
+        from dotenv import load_dotenv
+        import hashlib
+        from datetime import datetime
+        import webbrowser
+    except ModuleNotFoundError as _err:
+        if str(_err) in __pipList__:
+            raise _err
+        __pipList__.append(str(_err))
+        libName = str(_err).split("'")[1]
+        print("Install " + libName)
+        os.system("pip install " + libName)
+        os.system("pip install python-" + libName)
+        continue
+    break
+
+# Local Librarys
 import gitty
-from datetime import datetime
-import webbrowser
 from dataHandler import ChancelIDs
 from localDebuger import Debuger
+from botmain import Debug
 
 Debug = Debuger("BOT CLASS")
 

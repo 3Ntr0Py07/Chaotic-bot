@@ -4,12 +4,30 @@ This Library contains the local data handling for the manual server device softw
 #Julians Zugang
 ############################################################# Imports ##################################################################
 
-from abc import ABC, abstractmethod
-import json
+# Global
+
+__pipList__ = []
 import os
-import shutil
-import sys
-import time
+while True:
+    try:
+        from abc import ABC, abstractmethod
+        import json
+        import shutil
+        import sys
+        import time
+    except ModuleNotFoundError as _err:
+        if str(_err) in __pipList__:
+            raise _err
+        __pipList__.append(str(_err))
+        libName = str(_err).split("'")[1]
+        print("Install " + libName)
+        os.system("pip install " + libName)
+        os.system("pip install python-" + libName)
+        continue
+    break
+
+# Lokal
+
 from localDebuger import Debuger
 
 ############################################################# Classes ##################################################################
