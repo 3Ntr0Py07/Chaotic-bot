@@ -47,7 +47,7 @@ class __HandlerClass__(ABC):
             __reulte = dataDic[str(self._type_)][str(name)]
         except Exception as _err:
             __error = _err
-            Debug.LogWarning("Loading " + str(self._type_) + "." + str(name) + " faild. ", str(_err))
+            Debug.LogWarning("Loading " + str(self._type_) + "." + str(name) + " faild. ", addException=True)
             if (newEntry):
                 Debug.Log(" => Creating new empty entry " + str(self._type_) + "." + str(name) + ".")
                 self.__SaveData__(name, None)
@@ -72,7 +72,7 @@ class __HandlerClass__(ABC):
             dataDic[str(self._type_)][str(name)] = value
         except Exception as _err:
             __error = True
-            Debug.LogError(" => Loading " + str(self._type_) + "." + str(name) + " faild. " + str(_err))
+            Debug.LogError(" => Loading " + str(self._type_) + "." + str(name) + " faild. ")
         finally:
             d.close()
         if (__error):
@@ -84,7 +84,7 @@ class __HandlerClass__(ABC):
             json.dump(dataDic, d)
             Debug.Log(" => Saving " + str(self._type_) + "." + str(name) + " to config file was succesfully.")
         except Exception as _err:
-            Debug.LogError(" => Saving " + str(self._type_) + "." + str(name) + " faild. " + str(_err))
+            Debug.LogError(" => Saving " + str(self._type_) + "." + str(name) + " faild. ")
         finally:
             d.close()
         Debug.Log("End Saving")
@@ -138,7 +138,7 @@ def __Init__():
         dataDic = json.load(d)
         Debug.Log(" => Loading config file was succesfully.")
     except Exception as _err:
-        Debug.LogError(" => Loading config file faild. " + str(_err) + " Creat new.")
+        Debug.LogError(" => Loading config file faild. ", addException=True)
         __CreatJson__()
         dataDic = {}
     finally:
@@ -146,6 +146,7 @@ def __Init__():
         Debug.Log("End INIT")
     
 def __CreatJson__():
+    Debug.Log(" => Creat new config file.")
     try:
         d = open(JSON_PATH, "w")
         d.write("{}")

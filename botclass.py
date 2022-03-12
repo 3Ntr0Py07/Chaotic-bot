@@ -30,7 +30,7 @@ while True:
 import gitty
 from dataHandler import ChancelIDs
 from localDebuger import Debuger
-from botmain import Debug
+#from botmain import Debug
 
 Debug = Debuger("BOT CLASS")
 
@@ -40,6 +40,11 @@ PASSWORD = os.getenv('PASSWORD')
 
 ht = ['&status [Neuer Status] [Passwort]','&hello','&close [Passwort]','&ping','&snipe','&wipe [Nummer der Nachrichten]','&help']
 hd = ['Status des Bots ändern','Keine weiter Information','Bot Abschalten','Ping','Zeigt zuletzt gelöschte Nachricht','Löscht Nachrichten(Anzahl ohne den Command)','Zeigt diese Nachricht']
+
+def ShutdownBot(ctx = None):
+    if (ctx == None):
+        ctx = commands.Context
+    ctx.bot.logout()
 
 class DaCommands(commands.Cog):
 
@@ -80,7 +85,7 @@ class DaCommands(commands.Cog):
             await ctx.send('Shutting Down')
             time.sleep(10)
             await ctx.channel.purge(limit=1)
-            await ctx.bot.logout()
+            await ShutdownBot(ctx)
         else:
             await ctx.send('You cannot do that')
 

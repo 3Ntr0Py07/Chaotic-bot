@@ -16,11 +16,11 @@ while True:
         print("Install " + libName)
         os.system("pip install " + libName)
         os.system("pip install python-" + libName)
+        os.system("pip install py" + libName)
         continue
     break
 
 # Local Librarys
-import gitty
 import botclass
 from localDebuger import Debuger
 
@@ -45,7 +45,15 @@ async def on_ready():
 
 #print('\n'+tken+'\n')
 
-
 client.run(tken)
+try:
+    botclass.ShutdownBot()
+except Exception as _err:
+    print("3")
+    print(_err.with_Traceback(None))
+    os.system("pause")
+    print("4")
+print("5")
 os.system('clear')
+print("6")
 

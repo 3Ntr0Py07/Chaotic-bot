@@ -42,8 +42,11 @@ def __Init__():
     global repo
     global TIME
     global IND
+    global commit
+    Debug.Log("Start Init Git")
     gitRepoName = GitDataHandler.Load("GitReposetoryName", newEntry=True) # Chaossplitter/littlealchemist
     if (__isInit__ or (gitRepoName == None)):
+        Debug.LogWarning("Git faild to init. Pleas check repo path.")
         return -1
     try:
         colorama.init()
@@ -62,16 +65,14 @@ def __Init__():
     
         commit= []
         comms = CheckCommits()
-    
-        for i in range(comms.totalCount):
-            commit.append(str(comms[i]))
-            commit[i] = commit[i].replace('Commit(sha="','')
-            commit[i] = commit[i].replace('")','')
-    
+        if (comms != None):
+            for i in range(comms.totalCount):
+                commit.append(str(comms[i]).replace('Commit(sha="','').replace('")',''))
         __isInit__ = True
+        Debug.Log("Init Git was succesfully.")
         return 0
-    except Exception as _err:
-        Debug.LogError("Git faild to init", _err)
+    except:
+        Debug.LogError("Git faild to init.")
         __isInit__ = False
         return 1
 
